@@ -16,10 +16,15 @@ class Chromosome:
             self.genes.append(random.randint(0, 1))
 
     # a function to calculate the fitness of the chromosome
-    # in this case, the fittest chromosome will have all 1s. so it is simple as
-    # the number of 1s in the chromosome is the sum 
-    def compute_fitness(self):
-        self.fitness = sum(self.genes)
+    # in this case we are calculating the similarity of the chromosome to the target
+    # string by comparing each bit and finally determining a percentage by means of dividing by the 
+    # population size 
+    def compute_fitness(self, target):
+        matching_score = 0
+        for i in range(self.chromosome_size):
+            if self.genes[i] == target[i]:
+                matching_score += 1
+        self.fitness = matching_score / self.chromosome_size
 
     # a function to mutate a randomly selected gene position
     # when a index is passes, we just flip that particular gene value
@@ -29,7 +34,7 @@ class Chromosome:
 
 class GeneticAlgorithm:
     # constructor 
-    def __init__(self, _pop_size, _max_gen, _chromosome_size, _mutation_rate):
+    def __init__(self, _pop_size, _max_gen, _chromosome_size, _mutation_rate, _target):
         self.population = []  # to represent the actual population of chromosomes
         # to represent the selected chromosomes that can mate to produce children
         self.mating_pool = []
@@ -43,6 +48,7 @@ class GeneticAlgorithm:
         self.avg_fitness = []  # average fitness of each generation
         # max number of generations allowed to search for the solution chromosome
         self.max_generation = _max_gen
+        self.target = _target 
         self.init_population() # initialise population 
 
     
@@ -126,7 +132,7 @@ class GeneticAlgorithm:
             self.population[i] = child
 
             # compute the fitness of the new child
-            child.compute_fitness()
+            child.compute_fitness(self.target)
             # add the fitness value to the sum
             fitness_sum += child.fitness
 
@@ -147,11 +153,11 @@ class GeneticAlgorithm:
         self.generation = 0  
         # the exit condition in our case are
         # 1. the current generation exceed the max generations allowed
-        # 2. the best child has a fitness of 30 (which is all 1s)
-        while self.generation < self.max_generation and self.best.fitness < 30:
+        # 2. the best child has a fitness of 1 because 1 is 100% similarity between chromosone and target string 
+        while self.generation < self.max_generation and self.best.fitness < 1:
             # calculate the fitness of each chromosome in the population
             for chromosome in self.population:
-                chromosome.compute_fitness()
+                chromosome.compute_fitness(self.target)
             # update the mating pool
             self.update_mating_pool()
             # generate new child chromosomes to replace the current ones from the population
@@ -170,5 +176,7 @@ class GeneticAlgorithm:
 
 # create an object of the GeneticAlgorithm class passing in values for
 # the population, max generations, chromosome size, and mutation rate
-onemax = GeneticAlgorithm(100, 70, 30, 0.05)
+target = [0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0,
+          1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0] #random binary target string of size 30
+onemax = GeneticAlgorithm(100, 70, 30, 0.05, target)
 onemax.search()  

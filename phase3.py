@@ -16,10 +16,15 @@ class Chromosome:
             self.genes.append(random.randint(0, 1))
 
     # a function to calculate the fitness of the chromosome
-    # in this case, the fittest chromosome will have all 1s. so it is simple as
-    # the number of 1s in the chromosome is the sum 
+    # in this case, the aside from the normal fittest function of all 1's. 
+    # We have a better solution whereby a fitness of 60 can be achieved if the 
+    # every bit is 0 i.e the chromosome sum is 0
     def compute_fitness(self):
-        self.fitness = sum(self.genes)
+        count = sum(self.genes)
+        if count == 0:
+            self.fitness = 2 * self.chromosome_size
+        else:
+            self.fitness = count
 
     # a function to mutate a randomly selected gene position
     # when a index is passes, we just flip that particular gene value
@@ -29,7 +34,7 @@ class Chromosome:
 
 class GeneticAlgorithm:
     # constructor 
-    def __init__(self, _pop_size, _max_gen, _chromosome_size, _mutation_rate):
+    def __init__(self, _pop_size, _max_gen, _chromosome_size, _mutation_rate ):
         self.population = []  # to represent the actual population of chromosomes
         # to represent the selected chromosomes that can mate to produce children
         self.mating_pool = []
@@ -147,7 +152,7 @@ class GeneticAlgorithm:
         self.generation = 0  
         # the exit condition in our case are
         # 1. the current generation exceed the max generations allowed
-        # 2. the best child has a fitness of 30 (which is all 1s)
+        # 2. the best child has a fitness of 30
         while self.generation < self.max_generation and self.best.fitness < 30:
             # calculate the fitness of each chromosome in the population
             for chromosome in self.population:
