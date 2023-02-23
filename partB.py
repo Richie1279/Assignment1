@@ -9,8 +9,8 @@ random.seed(101)
 # the most common and easiest methods to read different file formats
 def read_files_and_generate_matrix():
     # first we specify the file names
-    lecturers_file = pd.read_excel('Supervisors.xlsx')
-    students_file =  pd.read_excel('Student-choices.xls')
+    lecturers_file = 'Supervisors.xlsx'
+    students_file = "Students.xls"
 
     # using pandas read_excel method, we read the excel files.
     # since there are no heading row within the excel file, we specify that using the header parameter
