@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import random
 random.seed(101)
 
+#Richard Houston 19365321
+
 
 # a function to read the excel files
 # we use pandas library to read excel files as it is one of
